@@ -6,6 +6,13 @@ class MarkovChain
     @last_state = nil
   end
   
+  # 
+  # appends +states+ to the end of this MarkovChain.
+  # 
+  # +states+ are arbitrary objects.
+  # 
+  # It returns this (modified) MarkovChain.
+  # 
   def append(states)
     for next_state in states
       state_occurences_map = (@data[@last_state] or Hash.new)
@@ -14,6 +21,7 @@ class MarkovChain
       @data[@last_state] = state_occurences_map
       @last_state = next_state
     end
+    return self
   end
   
   #
@@ -32,6 +40,9 @@ class MarkovChain
   
   private
   
+  # 
+  # This module is intended for inclusion into MarkovChain only.
+  # 
   module Prediction
     
     include Enumerable
