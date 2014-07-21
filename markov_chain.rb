@@ -25,7 +25,8 @@ class MarkovChain
   end
   
   #
-  # returns Enumerable of predicted states.
+  # returns Enumerable of predicted states - predicted continuation of this
+  # MarkovChain.
   # 
   def predict()
     self.extend(Prediction)
