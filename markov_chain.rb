@@ -1,6 +1,11 @@
 
 class MarkovChain
   
+  # 
+  # creates an empty MarkovChain.
+  # 
+  # +data+ is a map which will become owned by this MarkovChain.
+  # 
   def initialize(data = {})
     @data = data
     @last_state = nil
@@ -25,8 +30,7 @@ class MarkovChain
   end
   
   #
-  # returns Enumerable of predicted states - predicted continuation of this
-  # MarkovChain.
+  # returns Enumerable of predicted states.
   # 
   def predict()
     self.extend(Prediction)
