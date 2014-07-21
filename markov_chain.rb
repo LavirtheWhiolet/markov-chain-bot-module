@@ -12,6 +12,7 @@ class MarkovChain
       state_occurences_map[next_state] ||= 0
       state_occurences_map[next_state] += 1
       @data[@last_state] = state_occurences_map
+      @last_state = next_state
     end
   end
   
@@ -42,17 +43,21 @@ class MarkovChain
         #
         next_state = begin
           state_occurences_map = (@data[last_state] or Hash.new)
-          occurences_sum = state_occurences_map.reduce(0) { |sum, entry| sum + entry[1] }
-          choice = rand(occurences_sum + 1)
-          state_occurences_map.each_pair do |state, occurences|
-            choice -= occurences
-            if choice <= 0 then
-              break(state)
-            end
+          occurences_sum = state_occurences_map.reduce(0) do |sum, entry|
+            sum + entry[1]
           end
+          choice = rand(occurences_sum + 1)
+          chosen_state_and_occurences = state_occurences_map.find do |state, occurences|
+            choice -= occurences
+            choice <= 0 
+          end
+          chosen_state_and_occurences ||= [nil, nil]
+          chosen_state_and_occurences[0]
         end
         #
         yield next_state
+        #
+        last_state = next_state
       end
     end
     
