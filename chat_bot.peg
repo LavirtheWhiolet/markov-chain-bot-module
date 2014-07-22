@@ -1,0 +1,188 @@
+{...
+# encoding: UTF-8
+require 'markov_chain'
+require 'stringio'
+
+class ChatBot
+  
+  private_class_method :new
+  
+  #
+  # +data+ is a map. It may be empty, in this case a brand new ChatBot is
+  # created. +data+ becomes owned by the returned ChatBot.
+  # 
+  # +answer_limit+ is maximum size of the result of #answer().
+  # 
+  def self.from(data, answer_limit = 1000)
+    new(data, answer_limit)
+  end
+  
+  # :nonew:
+  def initialize(data, answer_limit)
+    @markov_chain =
+      if data.empty? then MarkovChain.new(data)
+      else MarkovChain.from(data)
+      end
+    @answer_limit = answer_limit
+  end
+  
+  # +data+ passed to #from().
+  def data
+    @markov_chain.data
+  end
+  
+  def learn(text)
+    @markov_chain.append!(tokenize(text)).append!([EndOfMessage.new])
+  end
+  
+  def answer(question)
+    answer = ""
+    previous_token = nil
+    catch :out_of_limit do
+      for token in @markov_chain.predict()
+        break if token.tkn_is_a? EndOfMessage or token.nil?
+        delimiter = 
+          if (previous_token.tkn_is_a? Word and token.tkn_is_a? Word) then " "
+          else ""
+          end
+        answer.append_limited(delimiter + token.tkn_value, @answer_limit)
+        previous_token = token
+      end
+    end
+    return answer
+  end
+  
+  private
+  
+  class ::String
+    
+    # appends +appendment+ to this String or throws :out_of_limit if
+    # this String will exceed +limit+ after the appending.
+    # 
+    # It returns this (modified) String.
+    # 
+    def append_limited(appendment, limit)
+      throw :out_of_limit if self.length + appendment.length > limit
+      self << appendment
+      return self
+    end
+    
+  end
+  
+  Token = Object
+  
+  class Token
+    
+    def tkn_value
+      self[1..-1]
+    end
+    
+    def tkn_is_a?(clazz)
+      clazz === self
+    end
+    
+  end
+  
+  class Word < Token
+    
+    def self.new(value)
+      "w" + value
+    end
+    
+    def self.===(x)
+      x.is_a? String and x[0] == "w"
+    end
+    
+  end
+  
+  class PunctuationMark < Token
+    
+    def self.new(value)
+      "p" + value
+    end
+    
+    def self.===(x)
+      x.is_a? String and x[0] == "p"
+    end
+    
+  end
+  
+  class EndOfMessage < Token
+    
+    def self.new()
+      nil
+    end
+    
+    def self.===(x)
+      x.nil?
+    end
+    
+  end
+  
+  #
+  # returns Array of Token-s.
+  # 
+  def tokenize(text)
+    yy_parse(StringIO.new(text))
+  end
+  
+}...
+
+text: Array[Token] =
+  { val = [] }
+  (
+    / word:w { val << Word.new(w) }
+    / punctuation-mark:p { val << PunctuationMark.new(p) }
+    / white-space+
+  )*
+  ;
+
+word: String =
+  { val = "" }
+  (
+    / word-part:>>val
+    / '-':(h) &word-part { val << h }
+  )+
+  ;
+
+word-part: String =
+  / 'a'...'z':val
+  / 'A'...'Z':val
+  / 'а'...'я':val
+  / 'А'...'Я':val
+  / '0'...'9':val
+  ;
+
+punctuation-mark: String =
+  { val = "" }
+  (white-space:>>val)*
+  (!word-part char:>>val)+
+  (white-space:>>val)*
+  ;
+
+# White space as specified in "Unicode Standard Annex #44: Unicode Character
+# Database" (http://www.unicode.org/reports/tr44, specifically
+# http://www.unicode.org/Public/UNIDATA/PropList.txt).
+white-space: String =
+  (
+    / U+0009...U+000D
+    / U+0020
+    / U+0085
+    / U+00A0
+    / U+1680
+    / U+180E
+    / U+2000...U+200A
+    / U+2028
+    / U+2029
+    / U+202F
+    / U+205F
+    / U+3000
+  )
+  { val = " " }
+  ;
+
+{...
+
+end
+
+}...
