@@ -27,7 +27,24 @@ class ChatBot
     @markov_chain.data
   end
   
+  private
+  
+  WORD_FLAG = "w"
+  PUNCTUATION_FLAG = "p"
+  END_FLAG = "e"
+  
 }...
+
+text =
+  { val = [] }
+  (
+    / word:w { val << (WORD_FLAG + w) }
+    / punctuation:p { val << (PUNCTUATION_FLAG + p) }
+    / whitespace
+  )*
+  ;
+
+
 
 {...
 
