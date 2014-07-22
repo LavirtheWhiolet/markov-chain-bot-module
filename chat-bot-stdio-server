@@ -4,10 +4,6 @@ require 'auto_marshalling_map'
 require 'optparse'
 require 'gdbm'
 
-def no obj
-	obj.nil?
-end
-
 # Parse arguments.
 data_file = nil
 answer_limit = 1000
@@ -24,13 +20,33 @@ OptionParser.new do |opts|
   	    "Default is #{answer_limit}.") do |limit|
   	answer_limit = limit
   end
-end
-abort %(--data is not specified) if no storage_file
-# Run!
+  opts.on("-h", "--help",
+          "Show this message and exit.") do
+    puts opts
+    exit
+  end
+end.parse!
+abort %(--data is not specified) if storage_file.nil?
+# Serve!
 begin
-  GDBM.open(storage_file) do |data|
+  # 
+  GDBM.open(data_file) do |data|
+    # 
     bot = ChatBot.from(AutoMarshallingMap.new(data))
-    
+    # Serve!
+    loop do
+      # 
+      method, uri, version = STDIN.gets.split(/ /+, 3)
+      
+      # 
+      headers = {}; while true
+        header = STDIN.gets
+        break if header == "\n"
+        header = header.split(/\: +/, 2)
+        headers[header[0]] = header[1]
+      end
+      # 
+    end
   end
 rescue Exception => e
   abort e.message
