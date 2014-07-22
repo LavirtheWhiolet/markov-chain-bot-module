@@ -1,0 +1,36 @@
+{...
+# encoding: UTF-8
+require 'markov_chain'
+
+class ChatBot
+  
+  private_class_method :new
+  
+  #
+  # +data+ is a map. It may be empty, in this case a brand new ChatBot is
+  # created. +data+ becomes owned by the returned ChatBot.
+  # 
+  def from(data)
+    new(data)
+  end
+  
+  # :nonew:
+  def initialize(data)
+    @markov_chain =
+      if data.empty? then MarkovChain.new(data)
+      else MarkovChain.from(data)
+      end
+  end
+  
+  # +data+ passed to #from().
+  def data
+    @markov_chain.data
+  end
+  
+}...
+
+{...
+
+end
+
+}...
