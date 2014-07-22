@@ -37,13 +37,17 @@ class ChatBot
   
   def answer(question)
     answer = ""
-    previous_token_type = nil
-    @markov_chain.predict().each do |token|
+    previous_token = nil
+    for token in @markov_chain.predict()
       break if token.tkn_is_a? EndOfMessage
-      appendment, previous_token_type =
-        case token
-        when Word
-          if previous_token_type == 
+      maybe_whitespace = 
+        if (previous_token.tkn_is_a? Word and token.tkn_is_a? Word) then " "
+        else ""
+        end
+      break if
+        answer.size + maybe_whitespace.size + token.tkn_value.size > @answer_limit
+      answer << delimiter << token.tkn_value
+      previous_token = token
     end
   end
   
@@ -90,11 +94,11 @@ class ChatBot
   class EndOfMessage < Token
     
     def self.new()
-      0
+      nil
     end
     
     def self.===(x)
-      x.is_a? Numeric and x == 0
+      x.nil?
     end
     
   end
