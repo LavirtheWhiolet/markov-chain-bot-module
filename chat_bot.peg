@@ -13,8 +13,8 @@ class ChatBot
   # 
   # +answer_limit+ is maximum size of the result of #answer().
   # 
-  def from(data, answer_limit = 1000)
-    new(data)
+  def self.from(data, answer_limit = 1000)
+    new(data, answer_limit)
   end
   
   # :nonew:
@@ -31,8 +31,8 @@ class ChatBot
     @markov_chain.data
   end
   
-  def learn!(text)
-    @markov_chain.append!(tokenize(text)).append!(EndOfMessage.new)
+  def learn(text)
+    @markov_chain.append!(tokenize(text)).append!([EndOfMessage.new])
   end
   
   def answer(question)
