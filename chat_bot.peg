@@ -38,20 +38,36 @@ class ChatBot
   def answer(question)
     answer = ""
     previous_token = nil
-    for token in @markov_chain.predict()
-      break if token.tkn_is_a? EndOfMessage
-      maybe_whitespace = 
-        if (previous_token.tkn_is_a? Word and token.tkn_is_a? Word) then " "
-        else ""
-        end
-      break if
-        answer.size + maybe_whitespace.size + token.tkn_value.size > @answer_limit
-      answer << delimiter << token.tkn_value
-      previous_token = token
+    catch :out_of_limit do
+      for token in @markov_chain.predict()
+        break if token.tkn_is_a? EndOfMessage or token.nil?
+        delimiter = 
+          if (previous_token.tkn_is_a? Word and token.tkn_is_a? Word) then " "
+          else ""
+          end
+        answer.append_limited(delimiter + token.tkn_value, @answer_limit)
+        previous_token = token
+      end
     end
+    return answer
   end
   
   private
+  
+  class ::String
+    
+    # appends +appendment+ to this String or throws :out_of_limit if
+    # this String will exceed +limit+ after the appending.
+    # 
+    # It returns this (modified) String.
+    # 
+    def append_limited(appendment, limit)
+      throw :out_of_limit if self.length + appendment.length > limit
+      self << appendment
+      return self
+    end
+    
+  end
   
   Token = Object
   
