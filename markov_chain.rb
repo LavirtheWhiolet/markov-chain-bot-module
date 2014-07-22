@@ -12,7 +12,7 @@ class MarkovChain
   # 
   # creates an empty MarkovChain.
   # 
-  # +data+ is a map which will become owned by this MarkovChain.
+  # +data+ is a map which becomes owned by this MarkovChain.
   # 
   def initialize(data = {})
     @data = data
@@ -54,7 +54,7 @@ class MarkovChain
   private
   
   # 
-  # This module is intended for inclusion into MarkovChain only.
+  # This module is only intended for inclusion into MarkovChain.
   # 
   module Prediction
     
