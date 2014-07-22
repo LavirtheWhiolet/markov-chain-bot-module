@@ -11,16 +11,19 @@ class ChatBot
   # +data+ is a map. It may be empty, in this case a brand new ChatBot is
   # created. +data+ becomes owned by the returned ChatBot.
   # 
-  def from(data)
+  # +answer_limit+ is maximum size of the result of #answer().
+  # 
+  def from(data, answer_limit = 1000)
     new(data)
   end
   
   # :nonew:
-  def initialize(data)
+  def initialize(data, answer_limit)
     @markov_chain =
       if data.empty? then MarkovChain.new(data)
       else MarkovChain.from(data)
       end
+    @answer_limit = answer_limit
   end
   
   # +data+ passed to #from().
@@ -29,15 +32,72 @@ class ChatBot
   end
   
   def learn!(text)
-    @markov_chain.append!(tokenize(text)).append!(End.new)
+    @markov_chain.append!(tokenize(text)).append!(EndOfMessage.new)
+  end
+  
+  def answer(question)
+    answer = ""
+    previous_token_type = nil
+    @markov_chain.predict().each do |token|
+      break if token.tkn_is_a? EndOfMessage
+      appendment, previous_token_type =
+        case token
+        when Word
+          if previous_token_type == 
+    end
   end
   
   private
   
-  class Token < Struct.new(:value); end
-  class Word < Token; end
-  class PunctuationMark < Token; end
-  class End < Token; end
+  Token = Object
+  
+  class Token
+    
+    def tkn_value
+      self[1..-1]
+    end
+    
+    def tkn_is_a?(clazz)
+      clazz === self
+    end
+    
+  end
+  
+  class Word < Token
+    
+    def self.new(value)
+      "w" + value
+    end
+    
+    def self.===(x)
+      x.is_a? String and x[0] == "w"
+    end
+    
+  end
+  
+  class PunctuationMark < Token
+    
+    def self.new(value)
+      "p" + value
+    end
+    
+    def self.===(x)
+      x.is_a? String and x[0] == "p"
+    end
+    
+  end
+  
+  class EndOfMessage < Token
+    
+    def self.new()
+      0
+    end
+    
+    def self.===(x)
+      x.is_a? Numeric and x == 0
+    end
+    
+  end
   
   #
   # returns Array of Token-s.
