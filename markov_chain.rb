@@ -26,7 +26,7 @@ class MarkovChain
   # 
   # It returns this (modified) MarkovChain.
   # 
-  def append(states)
+  def append!(states)
     for next_state in states
       state_occurences_map = (@data[@last_state] or Hash.new)
       state_occurences_map[next_state] ||= 0
