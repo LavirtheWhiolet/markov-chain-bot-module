@@ -2,6 +2,14 @@
 class MarkovChain
   
   # 
+  # +data+ is #data() of the other MarkovChain. It becomes owned by the
+  # returned MarkovChain.
+  # 
+  def self.from(data)
+    new(data)
+  end
+  
+  # 
   # creates an empty MarkovChain.
   # 
   # +data+ is a map which will become owned by this MarkovChain.
