@@ -38,7 +38,8 @@ class MarkovChain
   end
   
   #
-  # returns Enumerable of predicted states.
+  # returns Enumerable of predicted states. The result may contain nils if
+  # the MarkovChain can not predict a state.
   # 
   def predict()
     self.extend(Prediction)
