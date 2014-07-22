@@ -2,10 +2,36 @@
 require 'chat_bot'
 require 'auto_marshalling_map'
 require 'optparse'
+require 'gdbm'
 
+def no obj
+	obj.nil?
+end
+
+# Parse arguments.
+data_file = nil
+answer_limit = 1000
 OptionParser.new do |opts|
-  opts.banner "Usage: #{File.basename(__FILE__)} [options]"
+  opts.banner "Usage: #{File.basename(__FILE__)} options"
   opts.separator ""
   opts.separator "Options may be following:"
-  
+  opts.on("-d", "--data FILE",
+          "Store all data in FILE") do |file|
+  	data_file = file
+  end
+  opts.on("-a", "--anwser-limit LIMIT",
+  	    "Limit bot answer to max. LIMIT characters.",
+  	    "Default is #{answer_limit}.") do |limit|
+  	answer_limit = limit
+  end
+end
+abort %(--data is not specified) if no storage_file
+# Run!
+begin
+  GDBM.open(storage_file) do |data|
+    bot = ChatBot.from(AutoMarshallingMap.new(data))
+    
+  end
+rescue Exception => e
+  abort e.message
 end
