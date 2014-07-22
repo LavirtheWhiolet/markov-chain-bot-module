@@ -28,6 +28,10 @@ class ChatBot
     @markov_chain.data
   end
   
+  def learn!(text)
+    @markov_chain.append!(tokenize(text)).append!(End.new)
+  end
+  
   private
   
   class Token < Struct.new(:value); end
