@@ -89,7 +89,7 @@ task :all => [:gem]
 task :default => :all
 
 task :clean do
-  (FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB]).each do |entry|
+  (FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB] + FileList["*.gem"]).each do |entry|
     rm_r entry
   end
 end
