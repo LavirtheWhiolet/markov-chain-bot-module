@@ -81,7 +81,7 @@ GEMSPEC_FILES =
   end
 
 task :gem => (GEM_FILES + GEMSPEC_FILES) do
-  sh "gem build -q #{GEMSPEC_FILES.join(" ")}"
+  sh "gem build #{GEMSPEC_FILES.join(" ")}"
 end
 
 task :all => [:gem]
