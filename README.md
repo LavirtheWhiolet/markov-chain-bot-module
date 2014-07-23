@@ -47,7 +47,7 @@ One may save the bot's knowledge into key-value storage:
 
 <!-- exclude from gem -->
 
-## Miscellaneous
+## Credits
 
 Gem name: markov_chain_chat_bot
 Version: 0.0.1

@@ -36,7 +36,7 @@ class FileList
   
 end
 
-# ---- Build ----
+# ---- Tasks ----
 
 GEM_FILES =
   FileList["*.rb"].to { |f| "#{BUILD_DIR}/lib/#{f}" }.doing do |src_file, dest_file|
@@ -61,24 +61,24 @@ GEMSPEC_FILES =
   FileList["README.md"].to { |_| "#{BUILD_DIR}/gemspec" }.doing do |src_file, dest_file|
     src_file_sections =
       File.read(src_file).markdown_sections
-    misc_section =
-      src_file_sections.find { |section| section.name = "Miscellaneous" } or raise %(section "Credits" must be present in #{src_file})
-    misc =
+    credits_section =
+      src_file_sections.find { |section| section.name = "Credits" } or raise %(section "Credits" must be present in #{src_file})
+    credits =
       begin YAML.load(credits.content).which_must_be(Hash) rescue raise %(section "Credits" of "#{src_file}" must be YAML map) end
-    misc_get = lambda do |key|
-      misc[key] or raise %("#{key}" is not found in section "Credits" of "#{src_file}")
+    credits_get = lambda do |key|
+      credits[key] or raise %("#{key}" is not found in section "Credits" of "#{src_file}")
     end
     File.write dest_file, <<-GEMSPEC
       Gem::Specification.new do |s|
-        s.name        = #{misc_get["Gem name"].to_rb}
-        s.version     = #{misc_get["Version"].to_rb}
-        s.licenses    = #{[misc_get["License"]].to_rb}
+        s.name        = #{credits_get["Gem name"].to_rb}
+        s.version     = #{credits_get["Version"].to_rb}
+        s.licenses    = #{[credits_get["License"]].to_rb}
         s.summary     = #{src_file_sections.first.name.to_rb}
         s.description = #{src_file_sections.first.content.to_rb}
-        s.authors     = #{misc_get["Authors"].split(/\s*,\s*/).to_rb}
-        s.email       = #{misc_get["E-mail"].to_rb}
+        s.authors     = #{credits_get["Authors"].split(/\s*,\s*/).to_rb}
+        s.email       = #{credits_get["E-mail"].to_rb}
         s.files       = #{GEM_FILES.to_a.to_rb}
-        s.homepage    = #{misc_get["Homepage"].to_rb}
+        s.homepage    = #{credits_get["Homepage"].to_rb}
       end
     GEMSPEC
   end
