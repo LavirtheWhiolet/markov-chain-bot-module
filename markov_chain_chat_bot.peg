@@ -34,11 +34,19 @@ class MarkovChainChatBot
     @markov_chain.data
   end
   
+  # 
+  # makes this bot to learn something from +message+ (String).
+  # 
+  # It returns this (modified) MarkovChainChatBot.
+  # 
   def learn(message)
     @markov_chain.append!(tokenize(message)).append!([EndOfMessage.new])
     return self
   end
   
+  # 
+  # returns an answer (String) to +question+ (String).
+  # 
   def answer(question)
     answer = ""
     previous_token = nil
