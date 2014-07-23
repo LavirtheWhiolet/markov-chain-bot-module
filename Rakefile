@@ -76,7 +76,7 @@ GEMSPEC_FILES =
           s.description = #{content.markdown_sections.first.content.to_rb}
           s.authors = #{credits_get["Authors"].split(/\s*,\s*/).to_rb}
           s.email = #{credits_get["E-mail"].to_rb}
-          s.files = #{GEM_FILES.to_a.to_rb}
+          s.files = #{(RB_FILES + README_FILES).to_a.to_rb}
           s.extra_rdoc_files = #{README_FILES.to_a.to_rb}
           s.homepage = #{credits_get["Homepage"].to_rb}
         end
@@ -84,7 +84,7 @@ GEMSPEC_FILES =
     end
   end
 
-task :gem => (GEM_FILES + GEMSPEC_FILES) do
+task :gem => (RB_FILES + README_FILES + GEMSPEC_FILES) do
   sh "gem build #{GEMSPEC_FILES.join(" ")}"
 end
 
