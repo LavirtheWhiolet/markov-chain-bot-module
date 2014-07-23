@@ -17,9 +17,9 @@ A chat bot utilizing Markov chains. It speaks Russian and English.
 
 Basic usage:
 
-    require 'chat_bot'
+    require 'markov_chain_chat_bot'
     
-    bot = ChatBot.from(Hash.new)
+    bot = MarkovChainChatBot.from(Hash.new)
     bot.learn("one two three two one")
     bot.answer("count up and down please")
       #=> "one two three two three two one two one two three two one two one"
@@ -29,19 +29,19 @@ Basic usage:
 
 One may save the bot's knowledge into key-value storage:
 
-    require 'chat_bot'
+    require 'markov_chain_chat_bot'
     require 'auto_marshalling_map'
     require 'gdbm'
     
     # 1.
     kvs = GDBM.open("chat_bot.dat")
-    bot = ChatBot.from(AutoMarhsallingMap.new(kvs))
+    bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
     bot.learn("one two three two one")
     kvs.close()
     
     # 2.
     kvs = GDBM.open("chat_bot.dat")
-    bot = ChatBot.from(AutoMarhsallingMap.new(kvs))
+    bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
     bot.answer("count up and down please")
       #=> "one two three two three two three two one two one"
 
@@ -50,7 +50,7 @@ One may save the bot's knowledge into key-value storage:
 ## Credits
 
 Gem name: markov_chain_chat_bot
-Version: 0.1.0
+Version: 0.1.1
 License: Public Domain
 Authors: Lavir the Whiolet
 E-mail: Lavir.th.Whiolet@gmail.com
