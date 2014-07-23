@@ -4,6 +4,7 @@ require 'strscan'
 
 BUILD_DIR = "build"
 PEG2RB = "#{BUILD_DIR}/peg2rb.rb"
+README = "README.md"
 
 # ---- Utilities (part 1) ----
 
@@ -37,7 +38,7 @@ end
 
 # ---- Tasks ----
 
-RB_FILES =
+GEM_RB_FILES =
   FileList["*.rb"].to { |f| "#{BUILD_DIR}/lib/#{f}" }.doing do |src_file, dest_file|
     cp_p src_file, dest_file
   end +
@@ -45,8 +46,8 @@ RB_FILES =
     peg2rb src_file, dest_file
   end
 
-README_FILES =
-  FileList["README.md"].to { |_| "#{BUILD_DIR}/README" }.doing do |src_file, dest_file|
+GEM_README_FILES =
+  FileList[README].to { |_| "#{BUILD_DIR}/README" }.doing do |src_file, dest_file|
     File.translate src_file, dest_file do |content|
       content.exclude("<!-- exclude from gem -->", "<!-- end -->") do |b, e|
         STDERR.puts %(WARNING: no #{b}...#{e} is found in #{src_file})
@@ -60,7 +61,7 @@ README_FILES =
   end
 
 GEMSPEC_FILES =
-  FileList["README.md"].to { |_| "#{BUILD_DIR}/gemspec" }.doing do |src_file, dest_file|
+  FileList[README].to { |_| "#{BUILD_DIR}/gemspec" }.doing do |src_file, dest_file|
     File.translate src_file, dest_file do |content|
       credits_section = content.markdown_section("Credits") or raise %(section "Credits" must be present in #{src_file})
       credits = credits_section.content.to_h
@@ -77,8 +78,8 @@ GEMSPEC_FILES =
             exclude("<!--", "-->").strip.to_rb}
           s.authors = #{credits_get["Authors"].split(/\s*,\s*/).to_rb}
           s.email = #{credits_get["E-mail"].to_rb}
-          s.files = #{(RB_FILES + README_FILES).lchomp_dir(BUILD_DIR).to_rb}
-          s.extra_rdoc_files = #{README_FILES.lchomp_dir(BUILD_DIR).to_rb}
+          s.files = #{(GEM_RB_FILES + GEM_README_FILES).lchomp_dir(BUILD_DIR).to_rb}
+          s.extra_rdoc_files = #{GEM_README_FILES.lchomp_dir(BUILD_DIR).to_rb}
           s.homepage = #{credits_get["Homepage"].to_rb}
         end
       GEMSPEC
@@ -86,11 +87,11 @@ GEMSPEC_FILES =
   end
 
 desc "build Ruby gem"
-task :gem => (RB_FILES + README_FILES + GEMSPEC_FILES) do
+task :gem => (GEM_RB_FILES + GEM_README_FILES + GEMSPEC_FILES) do
   Dir.chdir BUILD_DIR do
     sh "gem build #{GEMSPEC_FILES.lchomp_dir(BUILD_DIR).join(" ")}"
   end
-  FileList["#{BUILD_DIR}/*.gem"].each { |file| mv file, BUILD_DIR }
+  FileList["#{BUILD_DIR}/*.gem"].each { |file| mv file, "." }
 end
 
 task :default => :gem
@@ -105,9 +106,12 @@ task :clean do
   end
 end
 
-file "doc" => (RB_FILES + README_FILES) do
-  sh "rdoc -o doc -m #{README_FILES.first} \
-    #{(RB_FILES + README_FILES).join(" ")}"
+desc "generate RDoc documentation"
+file "doc" => (GEM_RB_FILES + GEM_README_FILES) do
+  Dir.chdir BUILD_DIR do
+    sh "rdoc -o ../doc -m #{GEM_README_FILES.lchomp_dir(BUILD_DIR).first} \
+      #{(GEM_RB_FILES + GEM_README_FILES).lchomp_dir(BUILD_DIR).join(" ")}"
+  end
 end
 
 # ---- Utilities (part 2) ----
@@ -147,7 +151,7 @@ class String
     else self
     end
   end
-             
+  
   # MarkdownSection-s of this MarkdownText
   def markdown_sections
     s = StringScanner.new(self)
