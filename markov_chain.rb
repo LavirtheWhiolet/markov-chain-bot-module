@@ -46,7 +46,7 @@ class MarkovChain
   end
   
   # 
-  # +data+ passed to #initialize().
+  # +data+ passed to MarkovChain.new() or MarkovChain.from().
   # 
   def data
     @data

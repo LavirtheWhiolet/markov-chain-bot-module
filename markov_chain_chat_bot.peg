@@ -29,7 +29,7 @@ class MarkovChainChatBot
     @answer_limit = answer_limit
   end
   
-  # +data+ passed to #from().
+  # +data+ passed to MarkovChainChatBot.from().
   def data
     @markov_chain.data
   end
