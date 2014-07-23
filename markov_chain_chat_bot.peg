@@ -11,8 +11,9 @@ class MarkovChainChatBot
   private_class_method :new
   
   #
-  # +data+ is a map. It may be empty, in this case a brand new ChatBot is
-  # created. +data+ becomes owned by the returned ChatBot.
+  # +data+ is a map. It may be empty, in this case a brand new
+  # MarkovChainChatBot is created. +data+ becomes owned by the returned
+  # MarkovChainChatBot.
   # 
   # +answer_limit+ is maximum size of the result of #answer().
   # 
@@ -33,8 +34,9 @@ class MarkovChainChatBot
     @markov_chain.data
   end
   
-  def learn(text)
-    @markov_chain.append!(tokenize(text)).append!([EndOfMessage.new])
+  def learn(message)
+    @markov_chain.append!(tokenize(message)).append!([EndOfMessage.new])
+    return self
   end
   
   def answer(question)
