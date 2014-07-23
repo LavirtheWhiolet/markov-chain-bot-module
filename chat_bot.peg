@@ -53,9 +53,11 @@ class ChatBot
   
   private
   
+  # :enddoc:
+  
   class ::String
     
-    # appends +appendment+ to this String or throws :out_of_limit if
+    # appends +appendment+ to this String or throws +:out_of_limit+ if
     # this String will exceed +limit+ after the appending.
     # 
     # It returns this (modified) String.
@@ -181,7 +183,7 @@ white-space: String =
   ;
 
 {...
-
+  
 end
 
 }...
