@@ -95,14 +95,18 @@ end
 
 task :default => :gem
 
+desc "remove all generated files"
 task :clean do
-  (FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB] + FileList["*.gem"]).each do |entry|
+  files =
+    FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB] + FileList["*.gem"] +
+    FileList["doc"]
+  files.each do |entry|
     rm_r entry
   end
 end
 
-task :doc do
-  sh "rdoc -o #{BUILD_DIR}/doc -m #{README_FILES.first} \
+file "doc" => (RB_FILES + README_FILES) do
+  sh "rdoc -o doc -m #{README_FILES.first} \
     #{(RB_FILES + README_FILES).join(" ")}"
 end
 
