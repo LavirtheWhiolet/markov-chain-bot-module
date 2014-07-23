@@ -9,18 +9,18 @@ class AutoMarshallingMap
   # a backend storage for the new AutoMarshallingMap.
   # 
   def initialize(backend)
-  	@backend = backend
+    @backend = backend
   end
 
   def [](key)
-  	value_string = @backend[Marshal.dump(key)]
-  	return nil if value_string.nil?
-  	return Marshal.load value_string
+    value_string = @backend[Marshal.dump(key)]
+    return nil if value_string.nil?
+    return Marshal.load value_string
   end
 
   def []=(key, value)
-  	@backend[Marshal.dump(key)] = Marshal.dump(value)
-  	return value
+    @backend[Marshal.dump(key)] = Marshal.dump(value)
+    return value
   end
 
   # +backend+ argument passed to #new().

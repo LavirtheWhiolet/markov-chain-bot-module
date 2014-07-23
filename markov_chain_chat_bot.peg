@@ -20,8 +20,7 @@ class MarkovChainChatBot
     new(data, answer_limit)
   end
   
-  # :nonew:
-  def initialize(data, answer_limit)
+  def initialize(data, answer_limit)  # :nodoc:
     @markov_chain =
       if data.empty? then MarkovChain.new(data)
       else MarkovChain.from(data)
@@ -57,9 +56,11 @@ class MarkovChainChatBot
   
   private
   
+  # :enddoc:
+  
   class ::String
     
-    # appends +appendment+ to this String or throws :out_of_limit if
+    # appends +appendment+ to this String or throws +:out_of_limit+ if
     # this String will exceed +limit+ after the appending.
     # 
     # It returns this (modified) String.
@@ -185,7 +186,7 @@ white-space: String =
   ;
 
 {...
-
+  
 end
 
 }...

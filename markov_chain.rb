@@ -54,6 +54,8 @@ class MarkovChain
   
   private
   
+  # :enddoc:
+  
   # 
   # This module is only intended for inclusion into MarkovChain.
   # 
