@@ -49,11 +49,11 @@ One may save the bot's knowledge into key-value storage:
 
 ## Credits
 
-Gem name: markov_chain_chat_bot
-Version: 0.1.1
-License: Public Domain
-Authors: Lavir the Whiolet
-E-mail: Lavir.th.Whiolet@gmail.com
-Homepage: https://github.com/LavirtheWhiolet/markov-chain-bot-module
+- Gem name: markov_chain_chat_bot
+- Version: 0.1.1
+- License: Public Domain
+- Authors: Lavir the Whiolet
+- E-mail: Lavir.th.Whiolet@gmail.com
+- Homepage: https://github.com/LavirtheWhiolet/markov-chain-bot-module
 
 <!-- end -->

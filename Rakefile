@@ -64,7 +64,7 @@ GEMSPEC_FILES =
   FileList[README].to { |_| "#{BUILD_DIR}/gemspec" }.doing do |src_file, dest_file|
     File.translate src_file, dest_file do |content|
       credits_section = content.markdown_section("Credits") or raise %(section "Credits" must be present in #{src_file})
-      credits = credits_section.content.to_h
+      credits = credits_section.content.markdown_to_h
       credits_get = lambda do |key|
         credits[key] or raise %("#{key}" is not found in section "Credits" of "#{src_file}")
       end
@@ -188,11 +188,11 @@ class String
     return self.gsub(exclusion_regexp, "")
   end
   
-  def to_h
+  def markdown_to_h
     self.
       lines.
       map do |line|
-        entry = line.chomp.split(/\s*\:\s*/, 2)
+        entry = line.lchomp("- ").chomp.split(/\s*\:\s*/, 2)
         if entry.size == 2 then entry
         else nil
         end
