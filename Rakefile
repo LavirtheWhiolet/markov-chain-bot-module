@@ -73,24 +73,27 @@ GEMSPEC_FILES =
           s.version = #{credits_get["Version"].to_rb}
           s.license = #{credits_get["License"].to_rb}
           s.summary = #{content.markdown_sections.first.name.to_rb}
-          s.description = #{content.markdown_sections.first.content.to_rb}
+          s.description = #{content.markdown_sections.first.content.
+            exclude("<!--", "-->").strip.to_rb}
           s.authors = #{credits_get["Authors"].split(/\s*,\s*/).to_rb}
           s.email = #{credits_get["E-mail"].to_rb}
-          s.files = #{(RB_FILES + README_FILES).to_a.to_rb}
-          s.extra_rdoc_files = #{README_FILES.to_a.to_rb}
+          s.files = #{(RB_FILES + README_FILES).lchomp_dir(BUILD_DIR).to_rb}
+          s.extra_rdoc_files = #{README_FILES.lchomp_dir(BUILD_DIR).to_rb}
           s.homepage = #{credits_get["Homepage"].to_rb}
         end
       GEMSPEC
     end
   end
 
+desc "build Ruby gem"
 task :gem => (RB_FILES + README_FILES + GEMSPEC_FILES) do
-  sh "gem build #{GEMSPEC_FILES.join(" ")}"
+  Dir.chdir BUILD_DIR do
+    sh "gem build #{GEMSPEC_FILES.lchomp_dir(BUILD_DIR).join(" ")}"
+  end
+  FileList["#{BUILD_DIR}/*.gem"].each { |file| mv file, BUILD_DIR }
 end
 
-task :all => [:gem]
-
-task :default => :all
+task :default => :gem
 
 task :clean do
   (FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB] + FileList["*.gem"]).each do |entry|
@@ -98,7 +101,21 @@ task :clean do
   end
 end
 
+task :doc do
+  sh "rdoc -o #{BUILD_DIR}/doc -m #{README_FILES.first} \
+    #{(RB_FILES + README_FILES).join(" ")}"
+end
+
 # ---- Utilities (part 2) ----
+
+class FileList
+  
+  def lchomp_dir(dir)
+    dir = dir.chomp("/") + "/"
+    self.map { |file| file.lchomp dir }
+  end
+  
+end
 
 class File
   
@@ -121,6 +138,12 @@ end
 
 class String
   
+  def lchomp(prefix)
+    if self.start_with? prefix then self[prefix.length..-1]
+    else self
+    end
+  end
+             
   # MarkdownSection-s of this MarkdownText
   def markdown_sections
     s = StringScanner.new(self)
