@@ -3,7 +3,10 @@
 require 'markov_chain'
 require 'stringio'
 
-class ChatBot
+# 
+# A chat bot utilizing MarkovChain.
+# 
+class MarkovChainChatBot
   
   private_class_method :new
   
