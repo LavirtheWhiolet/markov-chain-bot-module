@@ -37,22 +37,25 @@ end
 
 # ---- Tasks ----
 
-GEM_FILES =
+RB_FILES =
   FileList["*.rb"].to { |f| "#{BUILD_DIR}/lib/#{f}" }.doing do |src_file, dest_file|
     cp_p src_file, dest_file
   end +
   FileList["*.peg"].to { |f| "#{BUILD_DIR}/lib/#{f.ext(".rb")}" }.doing do |src_file, dest_file|
     peg2rb src_file, dest_file
-  end +
+  end
+
+README_FILES =
   FileList["README.md"].to { |_| "#{BUILD_DIR}/README" }.doing do |src_file, dest_file|
     File.translate src_file, dest_file do |content|
-      content.exclude_or_warning("<!-- exclude from gem -->", "<!-- end -->") do |b, e|
-        %(WARNING: no #{b}...#{e} is found in #{src_file})
+      content.exclude("<!-- exclude from gem -->", "<!-- end -->") do |b, e|
+        STDERR.puts %(WARNING: no #{b}...#{e} is found in #{src_file})
       end.
       markdown_sections.map do |section|
         "#{"=" * (section.depth + 1)} #{section.name}\n\n#{section.content}\n\n"
       end.join.
-      gsub(/^    /, "  ")
+      gsub(/^    /, "  ").
+      exclude("<!--", "-->")
     end
   end
 
@@ -66,15 +69,16 @@ GEMSPEC_FILES =
       end
       <<-GEMSPEC
         Gem::Specification.new do |s|
-          s.name        = #{credits_get["Gem name"].to_rb}
-          s.version     = #{credits_get["Version"].to_rb}
-          s.licenses    = #{[credits_get["License"]].to_rb}
-          s.summary     = #{content.markdown_sections.first.name.to_rb}
+          s.name = #{credits_get["Gem name"].to_rb}
+          s.version = #{credits_get["Version"].to_rb}
+          s.license = #{credits_get["License"].to_rb}
+          s.summary = #{content.markdown_sections.first.name.to_rb}
           s.description = #{content.markdown_sections.first.content.to_rb}
-          s.authors     = #{credits_get["Authors"].split(/\s*,\s*/).to_rb}
-          s.email       = #{credits_get["E-mail"].to_rb}
-          s.files       = #{GEM_FILES.to_a.to_rb}
-          s.homepage    = #{credits_get["Homepage"].to_rb}
+          s.authors = #{credits_get["Authors"].split(/\s*,\s*/).to_rb}
+          s.email = #{credits_get["E-mail"].to_rb}
+          s.files = #{GEM_FILES.to_a.to_rb}
+          s.extra_rdoc_files = #{README_FILES.to_a.to_rb}
+          s.homepage = #{credits_get["Homepage"].to_rb}
         end
       GEMSPEC
     end
@@ -140,17 +144,16 @@ class String
     markdown_sections.find { |s| s.name == name }
   end
   
-  # removes everything between +start_string+ and +end_string+ (including) from
-  # this String or displays a warning if such parts are not found. Warning is
-  # a result of +warning_func+ which is passed with +start_string+ and
-  # +end_string+.
-  def exclude_or_warning(start_string, end_string, &warning_func)
+  # excludes everything between +start_string+ and +end_string+ (including) from
+  # this String. If +warning_func+ is specified and nothing to exclude is
+  # found then +warning_func+ is passed with +start_string+ and +end_string+.
+  def exclude(start_string, end_string, &func_if_not_found)
     exclusion_regexp = Regexp.new(
       Regexp.escape(start_string) + ".*?" + Regexp.escape(end_string),
       Regexp::MULTILINE
     )
-    STDERR.puts warning_func.(start_string, end_string) unless
-      exclusion_regexp === self
+    func_if_not_found.(start_string, end_string) if
+      func_if_not_found and not exclusion_regexp === self
     return self.gsub(exclusion_regexp, "")
   end
   
