@@ -35,7 +35,7 @@ class MarkovChainChatBot
   end
   
   # 
-  # makes this bot to learn something from +message+ (String).
+  # +message+ is String.
   # 
   # It returns this (modified) MarkovChainChatBot.
   # 
@@ -45,7 +45,9 @@ class MarkovChainChatBot
   end
   
   # 
-  # returns an answer (String) to +question+ (String).
+  # +question+ is String.
+  # 
+  # It returns String.
   # 
   def answer(question)
     answer = ""
