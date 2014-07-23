@@ -1,20 +1,14 @@
-<!-- summary -->
 # Markov chain chat bot
-<!-- end -->
 
-<!-- description -->
 A chat bot utilizing Markov chains. It speaks Russian and English.
-<!-- end -->
 
 <!-- exclude from gem -->
 
 ## Bureaucracy
 
-<!-- bureaucracy -->
 Gem name: markov_chain_chat_bot
 Version: 0.0.1
 License: Public Domain
-<!-- end of bureaucracy -->
 
 ## How to compile
 
@@ -23,7 +17,7 @@ License: Public Domain
 - Give command `rake` in this directory.
 - You have got a [Ruby gem](http://rubygems.org/)!
 
-<!-- end of exclusion-->
+<!-- end -->
 
 ## Examples
 
