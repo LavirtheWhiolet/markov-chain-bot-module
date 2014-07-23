@@ -17,8 +17,7 @@ class ChatBot
     new(data, answer_limit)
   end
   
-  # :nonew:
-  def initialize(data, answer_limit)
+  def initialize(data, answer_limit)  # :nodoc
     @markov_chain =
       if data.empty? then MarkovChain.new(data)
       else MarkovChain.from(data)
