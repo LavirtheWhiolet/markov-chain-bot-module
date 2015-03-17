@@ -22,7 +22,7 @@ class MarkovChain
   # 
   # appends +states+ to the end of this MarkovChain.
   # 
-  # +states+ are arbitrary objects.
+  # +states+ is an array of arbitrary objects.
   # 
   # It returns this (modified) MarkovChain.
   # 
@@ -38,7 +38,8 @@ class MarkovChain
   end
   
   #
-  # returns Enumerable of predicted states. The result may contain nils if
+  # returns Enumerable of predicted states. The states are predicted by
+  # states passed to #append!(). The result may contain nils if
   # the MarkovChain can not predict a state.
   # 
   def predict()
