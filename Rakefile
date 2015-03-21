@@ -102,7 +102,7 @@ task :clean do
     FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB] + FileList["*.gem"] +
     FileList["doc"]
   files.each do |entry|
-    rm_r entry
+    rm_rf entry
   end
 end
 
