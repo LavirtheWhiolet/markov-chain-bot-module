@@ -114,6 +114,19 @@ file "doc" => (GEM_RB_FILES + GEM_README_FILES) do
   end
 end
 
+desc "update web-site: RDoc documentation"
+task :"update-site/doc" => ["doc"] do
+  tmp_doc = "/tmp/c476aa1a-fb00-11e4-89f8-001d093840c4"
+  rm_r tmp_doc if File.exist? tmp_doc
+  mv "doc", tmp_doc
+  sh "git checkout gh-pages"
+  rm_r "doc" if File.exist? "doc"
+  mv tmp_doc, "doc"
+  sh "git add -A :/ && git commit -am 'Update RDoc documentation.'"
+  sh "git push origin gh-pages:gh-pages"
+  sh "git checkout master"
+end
+
 # ---- Utilities (part 2) ----
 
 class FileList
