@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>File: README [RDoc Documentation]</title>
+
+  <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet" />
+
+  <script src="./js/jquery.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="./js/thickbox-compressed.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="./js/quicksearch.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="./js/darkfish.js" type="text/javascript"
+    charset="utf-8"></script>
+</head>
+
+<body class="file">
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="./README.html">README</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class Index
+          <span class="search-toggle"><img src="./images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="./AutoMarshallingMap.html">AutoMarshallingMap</a></li>
+        
+          <li><a href="./MarkovChain.html">MarkovChain</a></li>
+        
+          <li><a href="./MarkovChainChatBot.html">MarkovChainChatBot</a></li>
+        
+          <li><a href="./Object.html">Object</a></li>
+        
+          <li><a href="./String.html">String</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    
+<h2>Markov chain chat bot</h2>
+
+<p>A chat bot utilizing Markov chains. It speaks Russian and English.</p>
+
+<h3>Examples</h3>
+
+<p>Basic usage:</p>
+
+<pre>require 'markov_chain_chat_bot'
+
+bot = MarkovChainChatBot.from(Hash.new)
+bot.learn(&quot;one two three two one&quot;)
+bot.answer(&quot;count up and down please&quot;)
+  #=&gt; &quot;one two three two three two one two one two three two one two one&quot;
+bot.learn(&quot;three four six&quot;)
+bot.answer(&quot;count from three please&quot;)
+  #=&gt; &quot;three two one two one two three four six&quot;</pre>
+
+<p>One may save the bot’s knowledge into key-value storage:</p>
+
+<pre>require 'markov_chain_chat_bot'
+require 'auto_marshalling_map'
+require 'gdbm'
+
+# 1.
+kvs = GDBM.open(&quot;chat_bot.dat&quot;)
+bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
+bot.learn(&quot;one two three two one&quot;)
+kvs.close()
+
+# 2.
+kvs = GDBM.open(&quot;chat_bot.dat&quot;)
+bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
+bot.answer(&quot;count up and down please&quot;)
+  #=&gt; &quot;one two three two three two three two one two one&quot;</pre>
+
+  </div>
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+</body>
+</html>
+

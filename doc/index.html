@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>RDoc Documentation</title>
+
+  <link type="text/css" media="screen" href="rdoc.css" rel="stylesheet" />
+
+  <script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body class="indexpage">
+
+  
+  <h1>RDoc Documentation</h1>
+
+  
+  <div id="main">
+    
+<h2>Markov chain chat bot</h2>
+
+<p>A chat bot utilizing Markov chains. It speaks Russian and English.</p>
+
+<h3>Examples</h3>
+
+<p>Basic usage:</p>
+
+<pre>require 'markov_chain_chat_bot'
+
+bot = MarkovChainChatBot.from(Hash.new)
+bot.learn(&quot;one two three two one&quot;)
+bot.answer(&quot;count up and down please&quot;)
+  #=&gt; &quot;one two three two three two one two one two three two one two one&quot;
+bot.learn(&quot;three four six&quot;)
+bot.answer(&quot;count from three please&quot;)
+  #=&gt; &quot;three two one two one two three four six&quot;</pre>
+
+<p>One may save the bot’s knowledge into key-value storage:</p>
+
+<pre>require 'markov_chain_chat_bot'
+require 'auto_marshalling_map'
+require 'gdbm'
+
+# 1.
+kvs = GDBM.open(&quot;chat_bot.dat&quot;)
+bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
+bot.learn(&quot;one two three two one&quot;)
+kvs.close()
+
+# 2.
+kvs = GDBM.open(&quot;chat_bot.dat&quot;)
+bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
+bot.answer(&quot;count up and down please&quot;)
+  #=&gt; &quot;one two three two three two three two one two one&quot;</pre>
+
+  </div>
+  
+
+  
+  
+  <h2>Files</h2>
+  <ul>
+    
+      <li class="file"><a href="README.html">README</a></li>
+    
+  </ul>
+  
+
+  <h2 id="classes">Classes/Modules</h2>
+  <ul>
+    
+    <li class="class"><a href="AutoMarshallingMap.html">AutoMarshallingMap</a></li>
+    
+    <li class="class"><a href="MarkovChain.html">MarkovChain</a></li>
+    
+    <li class="class"><a href="MarkovChainChatBot.html">MarkovChainChatBot</a></li>
+    
+    <li class="class"><a href="Object.html">Object</a></li>
+    
+    <li class="class"><a href="String.html">String</a></li>
+    
+  </ul>
+
+  <h2 id="methods">Methods</h2>
+  <ul>
+    
+      <li><a href="MarkovChain.html#method-c-from">::from &mdash; MarkovChain</a></li>
+    
+      <li><a href="MarkovChainChatBot.html#method-c-from">::from &mdash; MarkovChainChatBot</a></li>
+    
+      <li><a href="AutoMarshallingMap.html#method-c-new">::new &mdash; AutoMarshallingMap</a></li>
+    
+      <li><a href="MarkovChain.html#method-c-new">::new &mdash; MarkovChain</a></li>
+    
+      <li><a href="AutoMarshallingMap.html#method-i-5B-5D">#[] &mdash; AutoMarshallingMap</a></li>
+    
+      <li><a href="AutoMarshallingMap.html#method-i-5B-5D-3D">#[]= &mdash; AutoMarshallingMap</a></li>
+    
+      <li><a href="MarkovChainChatBot.html#method-i-answer">#answer &mdash; MarkovChainChatBot</a></li>
+    
+      <li><a href="MarkovChain.html#method-i-append-21">#append! &mdash; MarkovChain</a></li>
+    
+      <li><a href="String.html#method-i-append_limited">#append_limited &mdash; String</a></li>
+    
+      <li><a href="MarkovChainChatBot.html#method-i-data">#data &mdash; MarkovChainChatBot</a></li>
+    
+      <li><a href="MarkovChain.html#method-i-data">#data &mdash; MarkovChain</a></li>
+    
+      <li><a href="MarkovChainChatBot.html#method-i-learn">#learn &mdash; MarkovChainChatBot</a></li>
+    
+      <li><a href="MarkovChain.html#method-i-predict">#predict &mdash; MarkovChain</a></li>
+    
+  </ul>
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+</body>
+</html>
