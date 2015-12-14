@@ -7,7 +7,6 @@ A chat bot utilizing Markov chains. It speaks Russian and English.
 ## How to build
 
 - Install [Ruby](http://ruby-lang.org) 1.9.1 or latest.
-- Download ["peg2rb.rb"](https://raw.githubusercontent.com/LavirtheWhiolet/self-bootstrap/master/peg2rb.rb) from ["self-bootstrap"](https://github.com/LavirtheWhiolet/self-bootstrap) into "build" directory.
 - Give command `rake` in this directory.
 - You have got a [Ruby gem](http://rubygems.org/)!
 
@@ -50,7 +49,7 @@ One may save the bot's knowledge into key-value storage:
 ## Credits
 
 - Gem name: markov_chain_chat_bot
-- Version: 0.1.3
+- Version: 0.1.4
 - License: Public Domain
 - Authors: Lavir the Whiolet
 - E-mail: Lavir.th.Whiolet@gmail.com
