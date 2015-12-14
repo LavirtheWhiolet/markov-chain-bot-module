@@ -3,7 +3,6 @@ require 'strscan'
 # ---- Properties ----
 
 BUILD_DIR = "build"
-PEG2RB = "#{BUILD_DIR}/peg2rb.rb"
 README = "README.md"
 
 # ---- Utilities (part 1) ----
@@ -39,11 +38,8 @@ end
 # ---- Tasks ----
 
 GEM_RB_FILES =
-  FileList["*.rb"].to { |f| "#{BUILD_DIR}/lib/#{f}" }.doing do |src_file, dest_file|
+  FileList["lib/*.rb"].to { |f| "#{BUILD_DIR}/lib/#{f}" }.doing do |src_file, dest_file|
     cp_p src_file, dest_file
-  end +
-  FileList["*.peg"].to { |f| "#{BUILD_DIR}/lib/#{f.ext(".rb")}" }.doing do |src_file, dest_file|
-    peg2rb src_file, dest_file
   end
 
 GEM_README_FILES =
@@ -225,24 +221,6 @@ module Enumerable
     reduce({}) { |result, entry| result[entry[0]] = entry[1]; result }
   end
   
-end
-
-def peg2rb src_file, dest_file
-  mkdir_p File.dirname(dest_file)
-  retries = 0
-  begin
-    sh "ruby #{PEG2RB} #{src_file} > #{dest_file}"
-  rescue
-    case retries
-    when 0
-      STDERR.puts %(It looks like "#{PEG2RB}" is not present. I will try to download it for you.)
-      sh "wget -O#{PEG2RB} https://raw.githubusercontent.com/LavirtheWhiolet/self-bootstrap/master/peg2rb.rb"
-      retries += 1
-      retry
-    else
-      raise %("#{PEG2RB}" is not present)
-    end
-  end
 end
 
 # The same as #cp() but creates destination directory if it does not exist.

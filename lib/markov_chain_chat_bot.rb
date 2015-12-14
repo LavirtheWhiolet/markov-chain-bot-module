@@ -1,7 +1,6 @@
-{...
 # encoding: UTF-8
 require 'markov_chain'
-require 'stringio'
+require 'strscan'
 
 # 
 # A chat bot utilizing MarkovChain.
@@ -85,6 +84,41 @@ class MarkovChainChatBot
     
   end
   
+  #
+  # returns Array of Token-s.
+  # 
+  def tokenize(text)
+    tokens = []
+    s = StringScanner.new(text)
+    until s.eos?
+      # Word.
+      (
+        w = s.scan(/([-–]?[a-zA-Zа-яёА-ЯЁ0-9]+)+/) and
+          tokens << Word.new(w)
+      ) or
+      # Punctuation.
+      ( 
+        p = s.scan(/([#{WHITESPACE_CHARSET}]|[^\-–a-zA-Zа-яёА-ЯЁ0-9]|[-–](?![a-zA-Zа-яёА-ЯЁ0-9)]))+/o) and begin
+          p.gsub(/[#{WHITESPACE_CHARSET}]+/, " ")
+          if p != " " then
+            tokens << PunctuationMark.new(p)
+          end
+          true
+        end
+      ) or
+      break
+    end
+    return tokens
+  end
+  
+  # Accessible to #tokenize() only.
+  # 
+  # White space characters as specified in "Unicode Standard Annex #44: Unicode
+  # Character Database" (http://www.unicode.org/reports/tr44, specifically
+  # http://www.unicode.org/Public/UNIDATA/PropList.txt).
+  # 
+  WHITESPACE_CHARSET = "[\u0009-\u000D\u0020\u0085\u00A0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]"
+  
   Token = Object
   
   class Token
@@ -135,70 +169,4 @@ class MarkovChainChatBot
     
   end
   
-  #
-  # returns Array of Token-s.
-  # 
-  def tokenize(text)
-    yy_parse(StringIO.new(text))
-  end
-  
-}...
-
-text: Array[Token] =
-  { val = [] }
-  (
-    / word:w { val << Word.new(w) }
-    / punctuation-mark:p { val << PunctuationMark.new(p) }
-    / white-space+
-  )*
-  ;
-
-word: String =
-  { val = "" }
-  (
-    / word-part:>>val
-    / '-':(h) &word-part { val << h }
-  )+
-  ;
-
-word-part: String =
-  / 'a'...'z':val
-  / 'A'...'Z':val
-  / 'а'...'я':val
-  / 'А'...'Я':val
-  / '0'...'9':val
-  ;
-
-punctuation-mark: String =
-  { val = "" }
-  (white-space:>>val)*
-  (!word-part char:>>val)+
-  (white-space:>>val)*
-  ;
-
-# White space as specified in "Unicode Standard Annex #44: Unicode Character
-# Database" (http://www.unicode.org/reports/tr44, specifically
-# http://www.unicode.org/Public/UNIDATA/PropList.txt).
-white-space: String =
-  (
-    / U+0009...U+000D
-    / U+0020
-    / U+0085
-    / U+00A0
-    / U+1680
-    / U+180E
-    / U+2000...U+200A
-    / U+2028
-    / U+2029
-    / U+202F
-    / U+205F
-    / U+3000
-  )
-  { val = " " }
-  ;
-
-{...
-  
 end
-
-}...
