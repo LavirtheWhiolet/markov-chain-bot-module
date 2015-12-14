@@ -84,6 +84,41 @@ class MarkovChainChatBot
     
   end
   
+  #
+  # returns Array of Token-s.
+  # 
+  def tokenize(text)
+    tokens = []
+    s = StringScanner.new(text)
+    until s.eos?
+      # Word.
+      (
+        w = s.scan(/([-–]?[a-zA-Zа-яёА-ЯЁ0-9]+)+/) and
+          tokens << Word.new(w)
+      ) or
+      # Punctuation.
+      ( 
+        p = s.scan(/([#{WHITESPACE_CHARSET}]|[^\-–a-zA-Zа-яёА-ЯЁ0-9]|[-–](?![a-zA-Zа-яёА-ЯЁ0-9)]))+/o) and begin
+          p.gsub(/[#{WHITESPACE_CHARSET}]+/, " ")
+          if p != " " then
+            tokens << PunctuationMark.new(p)
+          end
+          true
+        end
+      ) or
+      break
+    end
+    return tokens
+  end
+  
+  # Accessible to #tokenize() only.
+  # 
+  # White space characters as specified in "Unicode Standard Annex #44: Unicode
+  # Character Database" (http://www.unicode.org/reports/tr44, specifically
+  # http://www.unicode.org/Public/UNIDATA/PropList.txt).
+  # 
+  WHITESPACE_CHARSET = "[\u0009-\u000D\u0020\u0085\u00A0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]"
+  
   Token = Object
   
   class Token
@@ -132,46 +167,6 @@ class MarkovChainChatBot
       x.nil?
     end
     
-  end
-  
-  #
-  # returns Array of Token-s.
-  # 
-  def tokenize(text)
-    tokens = []
-    s = StringScanner.new(text)
-    until s.eos?
-      # Word.
-      (
-        w = s.scan(/(-?[a-zA-Zа-яёА-ЯЁ0-9]+)+/) and
-          tokens << Word.new(w)
-      ) or
-      # Punctuation.
-      ( 
-        p = s.scan(/([#{WHITESPACE_CHARSET}]*)(([^\-a-zA-Zа-яёА-ЯЁ0-9#{WHITESPACE_CHARSET}]|-(?![a-zA-Zа-яёА-ЯЁ0-9#{WHITESPACE_CHARSET}]))+)([#{WHITESPACE_CHARSET}]*)/o) and
-          tokens << PunctuationMark.new("#{to_single_whitespace(s[1])}#{s[2]}#{to_single_whitespace(s[4])}") ) or
-      # White-space.
-      (
-        s.skip(/#{WHITESPACE_CHARSET}+/o)
-      ) or
-      break
-    end
-    return tokens
-  end
-  
-  # Accessible to #tokenize() only.
-  # 
-  # White space characters as specified in "Unicode Standard Annex #44: Unicode
-  # Character Database" (http://www.unicode.org/reports/tr44, specifically
-  # http://www.unicode.org/Public/UNIDATA/PropList.txt).
-  # 
-  WHITESPACE_CHARSET = "[\u0009-\u000D\u0020\u0085\u00A0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]"
-  
-  # Accessible to #tokenize() only.
-  def to_single_whitespace(str)
-    if str.empty? then ""
-    else " "
-    end
   end
   
 end
