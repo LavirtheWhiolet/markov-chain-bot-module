@@ -1,0 +1,12 @@
+        Gem::Specification.new do |s|
+          s.name = "markov_chain_chat_bot"
+          s.version = "0.1.4"
+          s.license = "Public Domain"
+          s.summary = "Markov chain chat bot"
+          s.description = "A chat bot utilizing Markov chains. It speaks Russian and English."
+          s.authors = ["Lavir the Whiolet"]
+          s.email = "Lavir.th.Whiolet@gmail.com"
+          s.files = ["lib/lib/auto_marshalling_map.rb", "lib/lib/chat_bot.rb", "lib/lib/markov_chain.rb", "lib/lib/markov_chain_chat_bot.rb", "README"]
+          s.extra_rdoc_files = ["README"]
+          s.homepage = "https://github.com/LavirtheWhiolet/markov-chain-bot-module"
+        end

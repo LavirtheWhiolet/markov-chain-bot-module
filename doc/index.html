@@ -1,128 +1,135 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html>
 <head>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<meta charset="UTF-8">
 
-  <title>RDoc Documentation</title>
+<title>RDoc Documentation</title>
 
-  <link type="text/css" media="screen" href="rdoc.css" rel="stylesheet" />
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
 
-  <script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
 
-</head>
-<body class="indexpage">
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
 
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
   
-  <h1>RDoc Documentation</h1>
-
+    <li><a href="./README.html">README</a>
   
-  <div id="main">
-    
-<h2>Markov chain chat bot</h2>
+  </ul>
+</div>
+
+    <div id="classindex-section" class="nav-section">
+  <h3>Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./AutoMarshallingMap.html">AutoMarshallingMap</a>
+  
+    <li><a href="./MarkovChain.html">MarkovChain</a>
+  
+    <li><a href="./MarkovChainChatBot.html">MarkovChainChatBot</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./String.html">String</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main">
+
+
+<h2 id="label-Markov+chain+chat+bot">Markov chain chat bot<span><a href="#label-Markov+chain+chat+bot">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>A chat bot utilizing Markov chains. It speaks Russian and English.</p>
 
-<h3>Examples</h3>
+<h3 id="label-Examples">Examples<span><a href="#label-Examples">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>Basic usage:</p>
 
-<pre>require 'markov_chain_chat_bot'
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">'markov_chain_chat_bot'</span>
 
-bot = MarkovChainChatBot.from(Hash.new)
-bot.learn(&quot;one two three two one&quot;)
-bot.answer(&quot;count up and down please&quot;)
-  #=&gt; &quot;one two three two three two one two one two three two one two one&quot;
-bot.learn(&quot;three four six&quot;)
-bot.answer(&quot;count from three please&quot;)
-  #=&gt; &quot;three two one two one two three four six&quot;</pre>
+<span class="ruby-identifier">bot</span> = <span class="ruby-constant">MarkovChainChatBot</span>.<span class="ruby-identifier">from</span>(<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
+<span class="ruby-identifier">bot</span>.<span class="ruby-identifier">learn</span>(<span class="ruby-string">&quot;one two three two one&quot;</span>)
+<span class="ruby-identifier">bot</span>.<span class="ruby-identifier">answer</span>(<span class="ruby-string">&quot;count up and down please&quot;</span>)
+  <span class="ruby-comment">#=&gt; &quot;one two three two three two one two one two three two one two one&quot;</span>
+<span class="ruby-identifier">bot</span>.<span class="ruby-identifier">learn</span>(<span class="ruby-string">&quot;three four six&quot;</span>)
+<span class="ruby-identifier">bot</span>.<span class="ruby-identifier">answer</span>(<span class="ruby-string">&quot;count from three please&quot;</span>)
+  <span class="ruby-comment">#=&gt; &quot;three two one two one two three four six&quot;</span>
+</pre>
 
 <p>One may save the bot’s knowledge into key-value storage:</p>
 
-<pre>require 'markov_chain_chat_bot'
-require 'auto_marshalling_map'
-require 'gdbm'
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">'markov_chain_chat_bot'</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">'auto_marshalling_map'</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">'gdbm'</span>
 
-# 1.
-kvs = GDBM.open(&quot;chat_bot.dat&quot;)
-bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
-bot.learn(&quot;one two three two one&quot;)
-kvs.close()
+<span class="ruby-comment"># 1.</span>
+<span class="ruby-identifier">kvs</span> = <span class="ruby-constant">GDBM</span>.<span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;chat_bot.dat&quot;</span>)
+<span class="ruby-identifier">bot</span> = <span class="ruby-constant">MarkovChainChatBot</span>.<span class="ruby-identifier">from</span>(<span class="ruby-constant">AutoMarhsallingMap</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">kvs</span>))
+<span class="ruby-identifier">bot</span>.<span class="ruby-identifier">learn</span>(<span class="ruby-string">&quot;one two three two one&quot;</span>)
+<span class="ruby-identifier">kvs</span>.<span class="ruby-identifier">close</span>()
 
-# 2.
-kvs = GDBM.open(&quot;chat_bot.dat&quot;)
-bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
-bot.answer(&quot;count up and down please&quot;)
-  #=&gt; &quot;one two three two three two three two one two one&quot;</pre>
+<span class="ruby-comment"># 2.</span>
+<span class="ruby-identifier">kvs</span> = <span class="ruby-constant">GDBM</span>.<span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;chat_bot.dat&quot;</span>)
+<span class="ruby-identifier">bot</span> = <span class="ruby-constant">MarkovChainChatBot</span>.<span class="ruby-identifier">from</span>(<span class="ruby-constant">AutoMarhsallingMap</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">kvs</span>))
+<span class="ruby-identifier">bot</span>.<span class="ruby-identifier">answer</span>(<span class="ruby-string">&quot;count up and down please&quot;</span>)
+  <span class="ruby-comment">#=&gt; &quot;one two three two three two three two one two one&quot;</span>
+</pre>
+</main>
 
-  </div>
-  
 
-  
-  
-  <h2>Files</h2>
-  <ul>
-    
-      <li class="file"><a href="README.html">README</a></li>
-    
-  </ul>
-  
 
-  <h2 id="classes">Classes/Modules</h2>
-  <ul>
-    
-    <li class="class"><a href="AutoMarshallingMap.html">AutoMarshallingMap</a></li>
-    
-    <li class="class"><a href="MarkovChain.html">MarkovChain</a></li>
-    
-    <li class="class"><a href="MarkovChainChatBot.html">MarkovChainChatBot</a></li>
-    
-    <li class="class"><a href="Object.html">Object</a></li>
-    
-    <li class="class"><a href="String.html">String</a></li>
-    
-  </ul>
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
 
-  <h2 id="methods">Methods</h2>
-  <ul>
-    
-      <li><a href="MarkovChain.html#method-c-from">::from &mdash; MarkovChain</a></li>
-    
-      <li><a href="MarkovChainChatBot.html#method-c-from">::from &mdash; MarkovChainChatBot</a></li>
-    
-      <li><a href="AutoMarshallingMap.html#method-c-new">::new &mdash; AutoMarshallingMap</a></li>
-    
-      <li><a href="MarkovChain.html#method-c-new">::new &mdash; MarkovChain</a></li>
-    
-      <li><a href="AutoMarshallingMap.html#method-i-5B-5D">#[] &mdash; AutoMarshallingMap</a></li>
-    
-      <li><a href="AutoMarshallingMap.html#method-i-5B-5D-3D">#[]= &mdash; AutoMarshallingMap</a></li>
-    
-      <li><a href="MarkovChainChatBot.html#method-i-answer">#answer &mdash; MarkovChainChatBot</a></li>
-    
-      <li><a href="MarkovChain.html#method-i-append-21">#append! &mdash; MarkovChain</a></li>
-    
-      <li><a href="String.html#method-i-append_limited">#append_limited &mdash; String</a></li>
-    
-      <li><a href="MarkovChainChatBot.html#method-i-data">#data &mdash; MarkovChainChatBot</a></li>
-    
-      <li><a href="MarkovChain.html#method-i-data">#data &mdash; MarkovChain</a></li>
-    
-      <li><a href="MarkovChainChatBot.html#method-i-learn">#learn &mdash; MarkovChainChatBot</a></li>
-    
-      <li><a href="MarkovChain.html#method-i-predict">#predict &mdash; MarkovChain</a></li>
-    
-  </ul>
-
-  <div id="validator-badges">
-    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-      Rdoc Generator</a> 2</small>.</p>
-  </div>
-</body>
-</html>
