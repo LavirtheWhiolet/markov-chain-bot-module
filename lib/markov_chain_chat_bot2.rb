@@ -21,6 +21,7 @@ class MarkovChainChatBot2
   end
   
   def initialize(data, answer_limit)  # :nodoc:
+    @next_word_id_storage = data
     @markov_chain = MarkovChain.from(data)
     @answer_limit = answer_limit
   end
@@ -65,6 +66,19 @@ class MarkovChainChatBot2
   private
   
   # :enddoc:
+  
+  def new_word_id
+    # 
+    new_word_id = (@next_word_id_storage[:n] ||= 1)
+    # Calculate next word ID.
+    if new_word_id > 0 then
+      @next_word_id_storage[:n] = -new_word_id
+    else
+      @next_word_id_storage[:n] = -new_word_id + 1
+    end
+    # 
+    return new_word_id
+  end
   
   class ::String
     
