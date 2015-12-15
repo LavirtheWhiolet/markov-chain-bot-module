@@ -233,6 +233,9 @@ class MarkovChainChatBot2
     
   end
   
+  # FIXME: EndOfMessage must currently coincide with an initial state of
+  #   MarkovChain, i.e. nil.
+  
   class EndOfMessage < Token
     
     def self.new()
@@ -244,9 +247,6 @@ class MarkovChainChatBot2
     end
     
   end
-  
-  # FIXME: EndOfMessage must currently coincide with an initial state of
-  #   MarkovChain, i.e. nil.
   
   # Accessible to #initialize() only.
   # 
