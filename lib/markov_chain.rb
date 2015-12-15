@@ -6,7 +6,7 @@ class MarkovChain
   # returned MarkovChain. It may be an empty map, in this case an empty
   # MarkovChain is created.
   # 
-  def self.from(data = {})
+  def self.from(data)
     new(data)
   end
   
