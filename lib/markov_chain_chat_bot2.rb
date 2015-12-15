@@ -1,6 +1,16 @@
 # encoding: UTF-8
 require 'markov_chain'
 require 'strscan'
+require 'key_mapping_map'
+
+# Optimization: See this constant's usage in MarkovChainChatBot2.
+I = Struct.new :v
+
+# Optimization: See this constant's usage in MarkovChainChatBot2.
+W = Struct.new :v
+
+# Optimization: See this constant's usage in MarkovChainChatBot2.
+M = Struct.new :v
 
 # 
 # A chat bot utilizing MarkovChain.
@@ -11,8 +21,8 @@ class MarkovChainChatBot2
   
   #
   # +data+ is a map. It may be empty, in this case a brand new
-  # MarkovChainChatBot is created. +data+ becomes owned by the returned
-  # MarkovChainChatBot.
+  # MarkovChainChatBot2 is created. +data+ becomes owned by the returned
+  # MarkovChainChatBot2.
   # 
   # +answer_limit+ is maximum size of the result of #answer().
   # 
@@ -21,23 +31,29 @@ class MarkovChainChatBot2
   end
   
   def initialize(data, answer_limit)  # :nodoc:
-    @next_word_id_storage = data
-    @markov_chain = MarkovChain.from(data)
     @answer_limit = answer_limit
+    @data = data
+    # Split data into separate maps.
+    @next_word_id_storage = data
+    @word_to_id = KeyMappingMap.new(data, &WordToIDKey)
+    @id_to_word = KeyMappingMap.new(data, &IDToWordKey)
+    @markov_chain = MarkovChain.from(KeyMappingMap.new(data, &MarkovChainDataKey))
   end
   
-  # +data+ passed to MarkovChainChatBot.from().
+  # +data+ passed to MarkovChainChatBot2.from().
   def data
-    @markov_chain.data
+    @data
   end
   
   # 
   # +message+ is String.
   # 
-  # It returns this (modified) MarkovChainChatBot.
+  # It returns this (modified) MarkovChainChatBot2.
   # 
   def learn(message)
-    @markov_chain.append!(tokenize(message)).append!([EndOfMessage.new])
+    @markov_chain.
+      append!(tokenize(message).map { |token| to_id(token) }).
+      append!([to_id(EndOfMessage.new)])
     return self
   end
   
@@ -51,6 +67,7 @@ class MarkovChainChatBot2
     previous_token = nil
     catch :out_of_limit do
       for token in @markov_chain.predict()
+        token = to_word(token)
         break if token.tkn_is_a? EndOfMessage or token.nil?
         delimiter = 
           if (previous_token.tkn_is_a? Word and token.tkn_is_a? Word) then " "
@@ -67,6 +84,10 @@ class MarkovChainChatBot2
   
   # :enddoc:
   
+  # Accessible to #to_id() only.
+  # 
+  # It returns a new Integer ID of a word which is unique amongst #data.
+  # 
   def new_word_id
     # 
     new_word_id = (@next_word_id_storage[:n] ||= 1)
@@ -78,6 +99,50 @@ class MarkovChainChatBot2
     end
     # 
     return new_word_id
+  end
+  
+  # returns an Integer ID of the +word+ which is unique amongst #data.
+  # 
+  # It returns nil if +word+ is nil.
+  # 
+  def to_id(word)
+    return nil if word.nil?
+    if (id = @word_to_id[word]).nil? then
+      id = new_word_id
+      @word_to_id[word] = id
+      @id_to_word[id] = word
+    end
+    return id
+  end
+  
+  # returns the word corresponding to +id+.
+  # 
+  # #to_id(word) must be called and must return +id+ at least once before
+  # this function can be used with such +id+.
+  # 
+  # +id+ is the result of #to_id.
+  # 
+  # Example:
+  #   
+  #   id = to_id("foobar")
+  #   puts to_word(id)  #=> "foobar"
+  #   
+  #   puts to_word(nil)  #=> nil
+  #   
+  #   puts to_word(20)  #=> wrong!
+  # 
+  def to_word(id)
+    return nil if id.nil?
+    @id_to_word[id]
+  end
+  
+  class ::Class
+    
+    # returns an alias to this Class#new.
+    def to_proc
+      lambda { |arg| self.new(arg) }
+    end
+    
   end
   
   class ::String
@@ -180,6 +245,36 @@ class MarkovChainChatBot2
     
   end
   
+  # FIXME: EndOfMessage must currently coincide with an initial state of
+  #   MarkovChain, i.e. nil.
+  
+  # Accessible to #initialize() only.
+  # 
+  # Used for splitting a map into several maps only.
+  # 
+  # Optimization: Marshal also dumps full class name. The shorter the class
+  # name the shorter the dumped value.
+  # 
+  WordToIDKey = I
+  
+  # Accessible to #initialize() only.
+  # 
+  # Used for splitting a map into several maps only.
+  # 
+  # Optimization: Marshal also dumps full class name. The shorter the class
+  # name the shorter the dumped value.
+  # 
+  IDToWordKey = W
+  
+  # Accessible to #initialize() only.
+  # 
+  # Used for splitting a map into several maps only.
+  # 
+  # Optimization: Marshal also dumps full class name. The shorter the class
+  # name the shorter the dumped value.
+  # 
+  MarkovChainDataKey = M
+  
 end
 
 bot = MarkovChainChatBot2.from(Hash.new)
@@ -189,3 +284,4 @@ puts bot.answer("count up and down please")
 bot.learn("three four six")
 puts bot.answer("count from three please")
   #=> "three two one two one two three four six"
+p bot.data

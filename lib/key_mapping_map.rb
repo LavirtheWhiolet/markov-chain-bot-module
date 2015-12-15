@@ -25,11 +25,11 @@ class KeyMappingMap
   end
   
   def [](key)
-    @backend[map_key.(key)]
+    @backend[@map_key.(key)]
   end
   
   def []=(key, value)
-    @backend[map_key.(key)] = value
+    @backend[@map_key.(key)] = value
   end
   
 end
