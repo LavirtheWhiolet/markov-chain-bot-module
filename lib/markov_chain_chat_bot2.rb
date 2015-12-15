@@ -114,7 +114,7 @@ class MarkovChainChatBot2
   # Character Database" (http://www.unicode.org/reports/tr44, specifically
   # http://www.unicode.org/Public/UNIDATA/PropList.txt).
   # 
-  WHITESPACE_CHARSET = "[\u0009-\u000D\u0020\u0085\u00A0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]"
+  WHITESPACE_CHARSET = "\u0009-\u000D\u0020\u0085\u00A0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000"
   
   Token = Object
   
