@@ -277,11 +277,11 @@ class MarkovChainChatBot2
   
 end
 
-bot = MarkovChainChatBot2.from(Hash.new)
-bot.learn("one two three two one")
-puts bot.answer("count up and down please")
-  #=> "one two three two three two one two one two three two one two one"
-bot.learn("three four six")
-puts bot.answer("count from three please")
-  #=> "three two one two one two three four six"
-p bot.data
+# bot = MarkovChainChatBot2.from(Hash.new)
+# bot.learn("one two three two one")
+# puts bot.answer("count up and down please")
+#   #=> "one two three two three two one two one two three two one two one"
+# bot.learn("three four six")
+# puts bot.answer("count from three please")
+#   #=> "three two one two one two three four six"
+# p bot.data
