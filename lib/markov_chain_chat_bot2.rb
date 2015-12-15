@@ -5,7 +5,7 @@ require 'strscan'
 # 
 # A chat bot utilizing MarkovChain.
 # 
-class MarkovChainChatBot
+class MarkovChainChatBot2
   
   private_class_method :new
   
