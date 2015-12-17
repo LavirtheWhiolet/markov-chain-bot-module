@@ -98,7 +98,7 @@ class MarkovChainChatBot
       ) or
       # Punctuation.
       ( 
-        p = s.scan(/([#{WHITESPACE_CHARSET}]|[^\-–a-zA-Zа-яёА-ЯЁ0-9]|[-–](?![a-zA-Zа-яёА-ЯЁ0-9)]))+/o) and begin
+        p = s.scan(/([#{WHITESPACE_CHARSET}]|[^\-–a-zA-Zа-яёА-ЯЁ0-9]|[-–](?![a-zA-Zа-яёА-ЯЁ0-9]))+/o) and begin
           p.gsub(/[#{WHITESPACE_CHARSET}]+/, " ")
           if p != " " then
             tokens << PunctuationMark.new(p)
