@@ -38,7 +38,7 @@ end
 # ---- Tasks ----
 
 GEM_RB_FILES =
-  FileList["lib/*.rb"].to { |f| "#{BUILD_DIR}/lib/#{f}" }.doing do |src_file, dest_file|
+  FileList["lib/*.rb"].to { |f| "#{BUILD_DIR}/#{f}" }.doing do |src_file, dest_file|
     cp_p src_file, dest_file
   end
 
@@ -95,7 +95,7 @@ task :default => :gem
 desc "remove all generated files"
 task :clean do
   files =
-    FileList["#{BUILD_DIR}/*"] - FileList[PEG2RB] + FileList["*.gem"] +
+    FileList["#{BUILD_DIR}/*"] + FileList["*.gem"] +
     FileList["doc"]
   files.each do |entry|
     rm_rf entry
