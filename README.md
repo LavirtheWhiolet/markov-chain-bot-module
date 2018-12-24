@@ -34,13 +34,13 @@ One may save the bot's knowledge into key-value storage:
     
     # 1.
     kvs = GDBM.open("chat_bot.dat")
-    bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
+    bot = MarkovChainChatBot.from(AutoMarshallingMap.new(kvs))
     bot.learn("one two three two one")
     kvs.close()
     
     # 2.
     kvs = GDBM.open("chat_bot.dat")
-    bot = MarkovChainChatBot.from(AutoMarhsallingMap.new(kvs))
+    bot = MarkovChainChatBot.from(AutoMarshallingMap.new(kvs))
     bot.answer("count up and down please")
       #=> "one two three two three two three two one two one"
 

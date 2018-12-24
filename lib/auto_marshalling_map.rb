@@ -25,5 +25,9 @@ class AutoMarshallingMap
 
   # +backend+ argument passed to #new().
   attr_reader :backend
-
+  
+  def empty?
+    @backend.empty?
+  end
+  
 end
